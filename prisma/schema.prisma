@@ -9,11 +9,77 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  loginId    String   @unique
+  loginId   String   @unique
   password  String
   name      String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
+
+  promises        Promise[]
+  promiseLookings PromiseLooking[]
+  sentMessages    Message[]
+  notifications   Notification[]
+}
+
+
+model PromiseLooking {
+  userId     Int
+  promiseId  Int
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  promise   Promise @relation(fields: [promiseId], references: [id], onDelete: Cascade)
+
+  @@id([userId, promiseId])
+}
+
+
+model Promise {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  name        String
+  description String
+  start_date  DateTime
+  end_date    DateTime
+
+  user        User             @relation(fields: [userId], references: [id])
+  lookings    PromiseLooking[]
+  messages    Message[]
+}
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  senderId    Int
+  promiseId   Int
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  content     String
+  sender      User     @relation(fields: [senderId], references: [id])
+  promise     Promise  @relation(fields: [promiseId], references: [id])
+}
+
+model Invitation{
+  id          Int     @id @default(autoincrement())  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  link        String
+  isAccepted  Boolean
+  acceptAt    DateTime
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  receiverId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  title       String
+  receiver    User     @relation(fields: [receiverId], references: [id])
 }

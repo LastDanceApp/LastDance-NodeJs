@@ -31,7 +31,7 @@ model PromiseLooking {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   promise   Promise @relation(fields: [promiseId], references: [id], onDelete: Cascade)
 
-  @@id([userId, promiseId])
+  @@unique([userId, promiseId])
 }
 
 
@@ -62,16 +62,6 @@ model Message {
   content     String
   sender      User     @relation(fields: [senderId], references: [id])
   promise     Promise  @relation(fields: [promiseId], references: [id])
-}
-
-model Invitation{
-  id          Int     @id @default(autoincrement())  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  link        String
-  isAccepted  Boolean
-  acceptAt    DateTime
 }
 
 model Notification {

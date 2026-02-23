@@ -19,15 +19,23 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('Last Dance API')
-    .setDescription('Last Dance API description')
+    .setTitle('LastDance-Backend')
+    .setDescription('API Docs')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        in: 'header',
+      },
+      'access-token', // 이 이름이 중요
+    )
     .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
-
-
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((err) => {

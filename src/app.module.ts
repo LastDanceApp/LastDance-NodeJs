@@ -6,11 +6,13 @@ import { AppService } from './app.service';
 
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { WitnessModule } from './witness/witness.module';
+import { PromiseModule } from './promise/promise.module';
 
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 
 @Module({
-  imports: [AuthModule, UserModule],
+  imports: [AuthModule, UserModule, WitnessModule, PromiseModule],
   controllers: [AppController],
   providers: [
     AppService,
